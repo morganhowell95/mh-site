@@ -3859,34 +3859,39 @@ select[multiple].input-lg,
 }
 
 /* line 8, /Users/mhowell/.rvm/gems/ruby-2.1.5/gems/bootstrap-sass-3.2.0.0/assets/stylesheets/bootstrap/mixins/_forms.scss */
-.has-error .help-block,
+.has-error .help-block, .field_with_errors .help-block,
 .has-error .control-label,
+.field_with_errors .control-label,
 .has-error .radio,
+.field_with_errors .radio,
 .has-error .checkbox,
+.field_with_errors .checkbox,
 .has-error .radio-inline,
-.has-error .checkbox-inline {
+.field_with_errors .radio-inline,
+.has-error .checkbox-inline,
+.field_with_errors .checkbox-inline {
   color: #a94442;
 }
 /* line 17, /Users/mhowell/.rvm/gems/ruby-2.1.5/gems/bootstrap-sass-3.2.0.0/assets/stylesheets/bootstrap/mixins/_forms.scss */
-.has-error .form-control {
+.has-error .form-control, .field_with_errors .form-control {
   border-color: #a94442;
   -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
 }
 /* line 20, /Users/mhowell/.rvm/gems/ruby-2.1.5/gems/bootstrap-sass-3.2.0.0/assets/stylesheets/bootstrap/mixins/_forms.scss */
-.has-error .form-control:focus {
+.has-error .form-control:focus, .field_with_errors .form-control:focus {
   border-color: #843534;
   -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #ce8483;
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #ce8483;
 }
 /* line 27, /Users/mhowell/.rvm/gems/ruby-2.1.5/gems/bootstrap-sass-3.2.0.0/assets/stylesheets/bootstrap/mixins/_forms.scss */
-.has-error .input-group-addon {
+.has-error .input-group-addon, .field_with_errors .input-group-addon {
   color: #a94442;
   border-color: #a94442;
   background-color: #f2dede;
 }
 /* line 33, /Users/mhowell/.rvm/gems/ruby-2.1.5/gems/bootstrap-sass-3.2.0.0/assets/stylesheets/bootstrap/mixins/_forms.scss */
-.has-error .form-control-feedback {
+.has-error .form-control-feedback, .field_with_errors .form-control-feedback {
   color: #a94442;
 }
 
@@ -8024,29 +8029,191 @@ button.close {
     display: none !important;
   }
 }
-/* line 4, /Users/mhowell/dev/site/mh-site/app/assets/stylesheets/custom.css.scss */
+/* COLORS */
+/* line 15, /Users/mhowell/dev/site/mh-site/app/assets/stylesheets/custom.css.scss */
 body {
   padding-top: 60px;
 }
 
-/* line 8, /Users/mhowell/dev/site/mh-site/app/assets/stylesheets/custom.css.scss */
+/* line 19, /Users/mhowell/dev/site/mh-site/app/assets/stylesheets/custom.css.scss */
 section {
   overflow: auto;
 }
 
-/* line 12, /Users/mhowell/dev/site/mh-site/app/assets/stylesheets/custom.css.scss */
+/* line 23, /Users/mhowell/dev/site/mh-site/app/assets/stylesheets/custom.css.scss */
 textarea {
   resize: vertical;
 }
 
-/* line 16, /Users/mhowell/dev/site/mh-site/app/assets/stylesheets/custom.css.scss */
+/* line 27, /Users/mhowell/dev/site/mh-site/app/assets/stylesheets/custom.css.scss */
 .center {
   text-align: center;
 }
-
-/* line 20, /Users/mhowell/dev/site/mh-site/app/assets/stylesheets/custom.css.scss */
+/* line 29, /Users/mhowell/dev/site/mh-site/app/assets/stylesheets/custom.css.scss */
 .center h1 {
   margin-bottom: 10px;
+}
+
+/* typography */
+/* line 37, /Users/mhowell/dev/site/mh-site/app/assets/stylesheets/custom.css.scss */
+h1, h2, h3, h4, h5, h6 {
+  line-height: 1;
+}
+
+/* line 41, /Users/mhowell/dev/site/mh-site/app/assets/stylesheets/custom.css.scss */
+h1 {
+  font-size: 3em;
+  letter-spacing: -2px;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+/* line 48, /Users/mhowell/dev/site/mh-site/app/assets/stylesheets/custom.css.scss */
+h2 {
+  font-size: 1.2em;
+  letter-spacing: -1px;
+  margin-bottom: 30px;
+  text-align: center;
+  font-weight: normal;
+  color: #777;
+}
+
+/* line 57, /Users/mhowell/dev/site/mh-site/app/assets/stylesheets/custom.css.scss */
+p {
+  font-size: 1.1em;
+  line-height: 1.7em;
+}
+
+/* line 62, /Users/mhowell/dev/site/mh-site/app/assets/stylesheets/custom.css.scss */
+#logo {
+  float: left;
+  margin-right: 10px;
+  font-size: 1.7em;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: -1px;
+  padding-top: 9px;
+  font-weight: bold;
+}
+/* line 71, /Users/mhowell/dev/site/mh-site/app/assets/stylesheets/custom.css.scss */
+#logo:hover {
+  color: #fff;
+  text-decoration: none;
+}
+
+/* footer */
+/* line 79, /Users/mhowell/dev/site/mh-site/app/assets/stylesheets/custom.css.scss */
+footer {
+  margin-top: 45px;
+  padding-top: 5px;
+  border-top: 1px solid #eaeaea;
+  color: #777;
+}
+/* line 85, /Users/mhowell/dev/site/mh-site/app/assets/stylesheets/custom.css.scss */
+footer a {
+  color: #555;
+}
+/* line 88, /Users/mhowell/dev/site/mh-site/app/assets/stylesheets/custom.css.scss */
+footer a:hover {
+  color: #222;
+}
+/* line 93, /Users/mhowell/dev/site/mh-site/app/assets/stylesheets/custom.css.scss */
+footer small {
+  float: left;
+}
+/* line 97, /Users/mhowell/dev/site/mh-site/app/assets/stylesheets/custom.css.scss */
+footer ul {
+  float: right;
+  list-style: none;
+}
+/* line 101, /Users/mhowell/dev/site/mh-site/app/assets/stylesheets/custom.css.scss */
+footer ul li {
+  float: left;
+  margin-left: 15px;
+}
+
+/* forms */
+/* line 110, /Users/mhowell/dev/site/mh-site/app/assets/stylesheets/custom.css.scss */
+input, textarea, select, .uneditable-input {
+  border: 1px solid #bbb;
+  width: 100%;
+  margin-bottom: 15px;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+/* line 117, /Users/mhowell/dev/site/mh-site/app/assets/stylesheets/custom.css.scss */
+input {
+  height: auto !important;
+}
+
+/* line 121, /Users/mhowell/dev/site/mh-site/app/assets/stylesheets/custom.css.scss */
+#error_explanation {
+  color: red;
+}
+/* line 123, /Users/mhowell/dev/site/mh-site/app/assets/stylesheets/custom.css.scss */
+#error_explanation ul {
+  color: red;
+  margin: 0 0 30px 0;
+}
+
+/* line 131, /Users/mhowell/dev/site/mh-site/app/assets/stylesheets/custom.css.scss */
+.field_with_errors .form-control {
+  color: #a94442;
+}
+
+/* sidebar */
+/* line 139, /Users/mhowell/dev/site/mh-site/app/assets/stylesheets/custom.css.scss */
+aside section.user_info {
+  margin-top: 20px;
+}
+/* line 142, /Users/mhowell/dev/site/mh-site/app/assets/stylesheets/custom.css.scss */
+aside section {
+  padding: 10px 0;
+  margin-top: 20px;
+}
+/* line 145, /Users/mhowell/dev/site/mh-site/app/assets/stylesheets/custom.css.scss */
+aside section:first-child {
+  border: 0;
+  padding-top: 0;
+}
+/* line 149, /Users/mhowell/dev/site/mh-site/app/assets/stylesheets/custom.css.scss */
+aside section span {
+  display: block;
+  margin-bottom: 3px;
+  line-height: 1;
+}
+/* line 154, /Users/mhowell/dev/site/mh-site/app/assets/stylesheets/custom.css.scss */
+aside section h1 {
+  font-size: 1.4em;
+  text-align: left;
+  letter-spacing: -1px;
+  margin-bottom: 3px;
+  margin-top: 0px;
+}
+
+/* line 164, /Users/mhowell/dev/site/mh-site/app/assets/stylesheets/custom.css.scss */
+.gravatar {
+  float: left;
+  margin-right: 10px;
+}
+
+/* line 169, /Users/mhowell/dev/site/mh-site/app/assets/stylesheets/custom.css.scss */
+.gravatar_edit {
+  margin-top: 15px;
+}
+
+/* miscellaneous */
+/* line 176, /Users/mhowell/dev/site/mh-site/app/assets/stylesheets/custom.css.scss */
+.debug_dump {
+  clear: both;
+  float: left;
+  width: 100%;
+  margin-top: 45px;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
 }
 /*
  * This is a manifest file that'll be compiled into application.css, which will include all the files

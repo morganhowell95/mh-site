@@ -10433,14 +10433,16 @@ return jQuery;
 
     // Default way to get an element's href. May be overridden at $.rails.href.
     href: function(element) {
-      return element[0].href;
+      return element.attr('href');
     },
 
     // Submits "remote" forms and links with ajax
     handleRemote: function(element) {
-      var method, url, data, withCredentials, dataType, options;
+      var method, url, data, elCrossDomain, crossDomain, withCredentials, dataType, options;
 
       if (rails.fire(element, 'ajax:before')) {
+        elCrossDomain = element.data('cross-domain');
+        crossDomain = elCrossDomain === undefined ? null : elCrossDomain;
         withCredentials = element.data('with-credentials') || null;
         dataType = element.data('type') || ($.ajaxSettings && $.ajaxSettings.dataType);
 
@@ -10492,7 +10494,7 @@ return jQuery;
           error: function(xhr, status, error) {
             element.trigger('ajax:error', [xhr, status, error]);
           },
-          crossDomain: rails.isCrossDomain(url)
+          crossDomain: crossDomain
         };
 
         // There is no withCredentials for IE6-8 when
@@ -10512,27 +10514,6 @@ return jQuery;
       }
     },
 
-    // Determines if the request is a cross domain request.
-    isCrossDomain: function(url) {
-      var originAnchor = document.createElement("a");
-      originAnchor.href = location.href;
-      var urlAnchor = document.createElement("a");
-
-      try {
-        urlAnchor.href = url;
-        // This is a workaround to a IE bug.
-        urlAnchor.href = urlAnchor.href;
-
-        // Make sure that the browser parses the URL and that the protocols and hosts match.
-        return !urlAnchor.protocol || !urlAnchor.host ||
-          (originAnchor.protocol + "//" + originAnchor.host !==
-            urlAnchor.protocol + "//" + urlAnchor.host);
-      } catch (e) {
-        // If there is an error parsing the URL, assume it is crossDomain.
-        return true;
-      }
-    },
-
     // Handles "data-method" on links such as:
     // <a href="/users/5" data-method="delete" rel="nofollow" data-confirm="Are you sure?">Delete</a>
     handleMethod: function(link) {
@@ -10544,7 +10525,7 @@ return jQuery;
         form = $('<form method="post" action="' + href + '"></form>'),
         metadataInput = '<input name="_method" value="' + method + '" type="hidden" />';
 
-      if (csrfParam !== undefined && csrfToken !== undefined && !rails.isCrossDomain(href)) {
+      if (csrfParam !== undefined && csrfToken !== undefined) {
         metadataInput += '<input name="' + csrfParam + '" value="' + csrfToken + '" type="hidden" />';
       }
 
@@ -10834,12 +10815,11 @@ return jQuery;
 
 })( jQuery );
 (function() {
-  var CSRFToken, Click, ComponentUrl, EVENTS, Link, ProgressBar, browserIsntBuggy, browserSupportsCustomEvents, browserSupportsPushState, browserSupportsTurbolinks, bypassOnLoadPopstate, cacheCurrentPage, cacheSize, changePage, clone, constrainPageCacheTo, createDocument, crossOriginRedirect, currentState, enableProgressBar, enableTransitionCache, executeScriptTags, extractTitleAndBody, fetch, fetchHistory, fetchReplacement, historyStateIsDefined, initializeTurbolinks, installDocumentReadyPageEventTriggers, installHistoryChangeHandler, installJqueryAjaxSuccessPageUpdateTrigger, loadedAssets, manuallyTriggerHashChangeForFirefox, pageCache, pageChangePrevented, pagesCached, popCookie, processResponse, progressBar, recallScrollPosition, ref, referer, reflectNewUrl, reflectRedirectedUrl, rememberCurrentState, rememberCurrentUrl, rememberReferer, removeNoscriptTags, requestMethodIsSafe, resetScrollPosition, setAutofocusElement, transitionCacheEnabled, transitionCacheFor, triggerEvent, visit, xhr,
+  var CSRFToken, Click, ComponentUrl, Link, browserCompatibleDocumentParser, browserIsntBuggy, browserSupportsCustomEvents, browserSupportsPushState, browserSupportsTurbolinks, bypassOnLoadPopstate, cacheCurrentPage, cacheSize, changePage, constrainPageCacheTo, createDocument, currentState, enableTransitionCache, executeScriptTags, extractTitleAndBody, fetch, fetchHistory, fetchReplacement, historyStateIsDefined, initializeTurbolinks, installDocumentReadyPageEventTriggers, installHistoryChangeHandler, installJqueryAjaxSuccessPageUpdateTrigger, loadedAssets, manuallyTriggerHashChangeForFirefox, pageCache, pageChangePrevented, pagesCached, popCookie, processResponse, recallScrollPosition, ref, referer, reflectNewUrl, reflectRedirectedUrl, rememberCurrentState, rememberCurrentUrl, rememberReferer, removeNoscriptTags, requestMethodIsSafe, resetScrollPosition, setAutofocusElement, transitionCacheEnabled, transitionCacheFor, triggerEvent, visit, xhr,
     indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; },
     extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
     hasProp = {}.hasOwnProperty,
-    slice = [].slice,
-    bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+    slice = [].slice;
 
   pageCache = {};
 
@@ -10847,39 +10827,24 @@ return jQuery;
 
   transitionCacheEnabled = false;
 
-  progressBar = null;
-
   currentState = null;
 
   loadedAssets = null;
 
   referer = null;
 
-  xhr = null;
+  createDocument = null;
 
-  EVENTS = {
-    BEFORE_CHANGE: 'page:before-change',
-    FETCH: 'page:fetch',
-    RECEIVE: 'page:receive',
-    CHANGE: 'page:change',
-    UPDATE: 'page:update',
-    LOAD: 'page:load',
-    RESTORE: 'page:restore',
-    BEFORE_UNLOAD: 'page:before-unload',
-    EXPIRE: 'page:expire'
-  };
+  xhr = null;
 
   fetch = function(url) {
     var cachedPage;
     url = new ComponentUrl(url);
     rememberReferer();
     cacheCurrentPage();
-    if (progressBar != null) {
-      progressBar.start();
-    }
     if (transitionCacheEnabled && (cachedPage = transitionCacheFor(url.absolute))) {
       fetchHistory(cachedPage);
-      return fetchReplacement(url, null, false);
+      return fetchReplacement(url);
     } else {
       return fetchReplacement(url, resetScrollPosition);
     }
@@ -10900,28 +10865,13 @@ return jQuery;
     return transitionCacheEnabled = enable;
   };
 
-  enableProgressBar = function(enable) {
-    if (enable == null) {
-      enable = true;
+  fetchReplacement = function(url, onLoadFunction) {
+    if (onLoadFunction == null) {
+      onLoadFunction = (function(_this) {
+        return function() {};
+      })(this);
     }
-    if (!browserSupportsTurbolinks) {
-      return;
-    }
-    if (enable) {
-      return progressBar != null ? progressBar : progressBar = new ProgressBar('html');
-    } else {
-      if (progressBar != null) {
-        progressBar.uninstall();
-      }
-      return progressBar = null;
-    }
-  };
-
-  fetchReplacement = function(url, onLoadFunction, showProgressBar) {
-    if (showProgressBar == null) {
-      showProgressBar = true;
-    }
-    triggerEvent(EVENTS.FETCH, {
+    triggerEvent('page:fetch', {
       url: url.absolute
     });
     if (xhr != null) {
@@ -10933,31 +10883,20 @@ return jQuery;
     xhr.setRequestHeader('X-XHR-Referer', referer);
     xhr.onload = function() {
       var doc;
-      triggerEvent(EVENTS.RECEIVE, {
+      triggerEvent('page:receive', {
         url: url.absolute
       });
       if (doc = processResponse()) {
         reflectNewUrl(url);
-        reflectRedirectedUrl();
         changePage.apply(null, extractTitleAndBody(doc));
         manuallyTriggerHashChangeForFirefox();
-        if (typeof onLoadFunction === "function") {
-          onLoadFunction();
-        }
-        return triggerEvent(EVENTS.LOAD);
+        reflectRedirectedUrl();
+        onLoadFunction();
+        return triggerEvent('page:load');
       } else {
-        return document.location.href = crossOriginRedirect() || url.absolute;
+        return document.location.href = url.absolute;
       }
     };
-    if (progressBar && showProgressBar) {
-      xhr.onprogress = (function(_this) {
-        return function(event) {
-          var percent;
-          percent = event.lengthComputable ? event.loaded / event.total * 100 : progressBar.value + (100 - progressBar.value) / 10;
-          return progressBar.advanceTo(percent);
-        };
-      })(this);
-    }
     xhr.onloadend = function() {
       return xhr = null;
     };
@@ -10973,7 +10912,7 @@ return jQuery;
     }
     changePage(cachedPage.title, cachedPage.body);
     recallScrollPosition(cachedPage);
-    return triggerEvent(EVENTS.RESTORE);
+    return triggerEvent('page:restore');
   };
 
   cacheCurrentPage = function() {
@@ -11014,14 +10953,13 @@ return jQuery;
       if (!(pageCache[key].cachedAt <= cacheTimesRecentFirst[limit])) {
         continue;
       }
-      triggerEvent(EVENTS.EXPIRE, pageCache[key]);
+      triggerEvent('page:expire', pageCache[key]);
       results.push(delete pageCache[key]);
     }
     return results;
   };
 
   changePage = function(title, body, csrfToken, runScripts) {
-    triggerEvent(EVENTS.BEFORE_UNLOAD);
     document.title = title;
     document.documentElement.replaceChild(body, document.body);
     if (csrfToken != null) {
@@ -11032,11 +10970,8 @@ return jQuery;
       executeScriptTags();
     }
     currentState = window.history.state;
-    if (progressBar != null) {
-      progressBar.done();
-    }
-    triggerEvent(EVENTS.CHANGE);
-    return triggerEvent(EVENTS.UPDATE);
+    triggerEvent('page:change');
+    return triggerEvent('page:update');
   };
 
   executeScriptTags = function() {
@@ -11052,9 +10987,6 @@ return jQuery;
       for (j = 0, len1 = ref1.length; j < len1; j++) {
         attr = ref1[j];
         copy.setAttribute(attr.name, attr.value);
-      }
-      if (!script.hasAttribute('async')) {
-        copy.async = false;
       }
       copy.appendChild(document.createTextNode(script.innerHTML));
       parentNode = script.parentNode, nextSibling = script.nextSibling;
@@ -11090,14 +11022,7 @@ return jQuery;
     if (location = xhr.getResponseHeader('X-XHR-Redirected-To')) {
       location = new ComponentUrl(location);
       preservedHash = location.hasNoHash() ? document.location.hash : '';
-      return window.history.replaceState(window.history.state, '', location.href + preservedHash);
-    }
-  };
-
-  crossOriginRedirect = function() {
-    var redirect;
-    if (((redirect = xhr.getResponseHeader('Location')) != null) && (new ComponentUrl(redirect)).crossOrigin()) {
-      return redirect;
+      return window.history.replaceState(currentState, '', location.href + preservedHash);
     }
   };
 
@@ -11136,19 +11061,6 @@ return jQuery;
     }
   };
 
-  clone = function(original) {
-    var copy, key, value;
-    if ((original == null) || typeof original !== 'object') {
-      return original;
-    }
-    copy = new original.constructor();
-    for (key in original) {
-      value = original[key];
-      copy[key] = clone(value);
-    }
-    return copy;
-  };
-
   popCookie = function(name) {
     var ref, value;
     value = ((ref = document.cookie.match(new RegExp(name + "=(\\w+)"))) != null ? ref[1].toUpperCase() : void 0) || '';
@@ -11158,9 +11070,6 @@ return jQuery;
 
   triggerEvent = function(name, data) {
     var event;
-    if (typeof Prototype !== 'undefined') {
-      Event.fire(document, name, data, true);
-    }
     event = document.createEvent('Events');
     if (data) {
       event.data = data;
@@ -11169,10 +11078,8 @@ return jQuery;
     return document.dispatchEvent(event);
   };
 
-  pageChangePrevented = function(url) {
-    return !triggerEvent(EVENTS.BEFORE_CHANGE, {
-      url: url
-    });
+  pageChangePrevented = function() {
+    return !triggerEvent('page:before-change');
   };
 
   processResponse = function() {
@@ -11182,12 +11089,11 @@ return jQuery;
       return (400 <= (ref = xhr.status) && ref < 600);
     };
     validContent = function() {
-      var contentType;
-      return ((contentType = xhr.getResponseHeader('Content-Type')) != null) && contentType.match(/^(?:text\/html|application\/xhtml\+xml|application\/xml)(?:;|$)/);
+      return xhr.getResponseHeader('Content-Type').match(/^(?:text\/html|application\/xhtml\+xml|application\/xml)(?:;|$)/);
     };
     extractTrackAssets = function(doc) {
       var i, len, node, ref, results;
-      ref = doc.querySelector('head').childNodes;
+      ref = doc.head.childNodes;
       results = [];
       for (i = 0, len = ref.length; i < len; i++) {
         node = ref[i];
@@ -11228,7 +11134,7 @@ return jQuery;
   extractTitleAndBody = function(doc) {
     var title;
     title = doc.querySelector('title');
-    return [title != null ? title.textContent : void 0, removeNoscriptTags(doc.querySelector('body')), CSRFToken.get(doc).token, 'runScripts'];
+    return [title != null ? title.textContent : void 0, removeNoscriptTags(doc.body), CSRFToken.get(doc).token, 'runScripts'];
   };
 
   CSRFToken = {
@@ -11251,18 +11157,44 @@ return jQuery;
     }
   };
 
-  createDocument = function(html) {
-    var doc;
-    doc = document.documentElement.cloneNode();
-    doc.innerHTML = html;
-    doc.head = doc.querySelector('head');
-    doc.body = doc.querySelector('body');
-    return doc;
+  browserCompatibleDocumentParser = function() {
+    var createDocumentUsingDOM, createDocumentUsingParser, createDocumentUsingWrite, e, ref, testDoc;
+    createDocumentUsingParser = function(html) {
+      return (new DOMParser).parseFromString(html, 'text/html');
+    };
+    createDocumentUsingDOM = function(html) {
+      var doc;
+      doc = document.implementation.createHTMLDocument('');
+      doc.documentElement.innerHTML = html;
+      return doc;
+    };
+    createDocumentUsingWrite = function(html) {
+      var doc;
+      doc = document.implementation.createHTMLDocument('');
+      doc.open('replace');
+      doc.write(html);
+      doc.close();
+      return doc;
+    };
+    try {
+      if (window.DOMParser) {
+        testDoc = createDocumentUsingParser('<html><body><p>test');
+        return createDocumentUsingParser;
+      }
+    } catch (_error) {
+      e = _error;
+      testDoc = createDocumentUsingDOM('<html><body><p>test');
+      return createDocumentUsingDOM;
+    } finally {
+      if ((testDoc != null ? (ref = testDoc.body) != null ? ref.childNodes.length : void 0 : void 0) !== 1) {
+        return createDocumentUsingWrite;
+      }
+    }
   };
 
   ComponentUrl = (function() {
-    function ComponentUrl(original1) {
-      this.original = original1 != null ? original1 : document.location.href;
+    function ComponentUrl(original) {
+      this.original = original != null ? original : document.location.href;
       if (this.original.constructor === ComponentUrl) {
         return this.original;
       }
@@ -11270,7 +11202,7 @@ return jQuery;
     }
 
     ComponentUrl.prototype.withoutHash = function() {
-      return this.href.replace(this.hash, '').replace('#', '');
+      return this.href.replace(this.hash, '');
     };
 
     ComponentUrl.prototype.withoutHashForIE10compatibility = function() {
@@ -11279,10 +11211,6 @@ return jQuery;
 
     ComponentUrl.prototype.hasNoHash = function() {
       return this.hash.length === 0;
-    };
-
-    ComponentUrl.prototype.crossOrigin = function() {
-      return this.origin !== (new ComponentUrl).origin;
     };
 
     ComponentUrl.prototype._parse = function() {
@@ -11322,17 +11250,20 @@ return jQuery;
         return this.link;
       }
       this.original = this.link.href;
-      this.originalElement = this.link;
-      this.link = this.link.cloneNode(false);
       Link.__super__.constructor.apply(this, arguments);
     }
 
     Link.prototype.shouldIgnore = function() {
-      return this.crossOrigin() || this._anchored() || this._nonHtml() || this._optOut() || this._target();
+      return this._crossOrigin() || this._anchored() || this._nonHtml() || this._optOut() || this._target();
+    };
+
+    Link.prototype._crossOrigin = function() {
+      return this.origin !== (new ComponentUrl).origin;
     };
 
     Link.prototype._anchored = function() {
-      return (this.hash.length > 0 || this.href.charAt(this.href.length - 1) === '#') && (this.withoutHash() === (new ComponentUrl).withoutHash());
+      var current;
+      return ((this.hash && this.withoutHash()) === (current = new ComponentUrl).withoutHash()) || (this.href === current.href + '#');
     };
 
     Link.prototype._nonHtml = function() {
@@ -11341,7 +11272,7 @@ return jQuery;
 
     Link.prototype._optOut = function() {
       var ignore, link;
-      link = this.originalElement;
+      link = this.link;
       while (!(ignore || link === document)) {
         ignore = link.getAttribute('data-no-turbolink') != null;
         link = link.parentNode;
@@ -11376,7 +11307,7 @@ return jQuery;
       }
       this._extractLink();
       if (this._validForTurbolinks()) {
-        if (!pageChangePrevented(this.link.absolute)) {
+        if (!pageChangePrevented()) {
           visit(this.link.href);
         }
         this.event.preventDefault();
@@ -11406,137 +11337,14 @@ return jQuery;
 
   })();
 
-  ProgressBar = (function() {
-    var className;
-
-    className = 'turbolinks-progress-bar';
-
-    function ProgressBar(elementSelector) {
-      this.elementSelector = elementSelector;
-      this._trickle = bind(this._trickle, this);
-      this.value = 0;
-      this.content = '';
-      this.speed = 300;
-      this.opacity = 0.99;
-      this.install();
-    }
-
-    ProgressBar.prototype.install = function() {
-      this.element = document.querySelector(this.elementSelector);
-      this.element.classList.add(className);
-      this.styleElement = document.createElement('style');
-      document.head.appendChild(this.styleElement);
-      return this._updateStyle();
-    };
-
-    ProgressBar.prototype.uninstall = function() {
-      this.element.classList.remove(className);
-      return document.head.removeChild(this.styleElement);
-    };
-
-    ProgressBar.prototype.start = function() {
-      return this.advanceTo(5);
-    };
-
-    ProgressBar.prototype.advanceTo = function(value) {
-      var ref;
-      if ((value > (ref = this.value) && ref <= 100)) {
-        this.value = value;
-        this._updateStyle();
-        if (this.value === 100) {
-          return this._stopTrickle();
-        } else if (this.value > 0) {
-          return this._startTrickle();
-        }
-      }
-    };
-
-    ProgressBar.prototype.done = function() {
-      if (this.value > 0) {
-        this.advanceTo(100);
-        return this._reset();
-      }
-    };
-
-    ProgressBar.prototype._reset = function() {
-      var originalOpacity;
-      originalOpacity = this.opacity;
-      setTimeout((function(_this) {
-        return function() {
-          _this.opacity = 0;
-          return _this._updateStyle();
-        };
-      })(this), this.speed / 2);
-      return setTimeout((function(_this) {
-        return function() {
-          _this.value = 0;
-          _this.opacity = originalOpacity;
-          return _this._withSpeed(0, function() {
-            return _this._updateStyle(true);
-          });
-        };
-      })(this), this.speed);
-    };
-
-    ProgressBar.prototype._startTrickle = function() {
-      if (this.trickling) {
-        return;
-      }
-      this.trickling = true;
-      return setTimeout(this._trickle, this.speed);
-    };
-
-    ProgressBar.prototype._stopTrickle = function() {
-      return delete this.trickling;
-    };
-
-    ProgressBar.prototype._trickle = function() {
-      if (!this.trickling) {
-        return;
-      }
-      this.advanceTo(this.value + Math.random() / 2);
-      return setTimeout(this._trickle, this.speed);
-    };
-
-    ProgressBar.prototype._withSpeed = function(speed, fn) {
-      var originalSpeed, result;
-      originalSpeed = this.speed;
-      this.speed = speed;
-      result = fn();
-      this.speed = originalSpeed;
-      return result;
-    };
-
-    ProgressBar.prototype._updateStyle = function(forceRepaint) {
-      if (forceRepaint == null) {
-        forceRepaint = false;
-      }
-      if (forceRepaint) {
-        this._changeContentToForceRepaint();
-      }
-      return this.styleElement.textContent = this._createCSSRule();
-    };
-
-    ProgressBar.prototype._changeContentToForceRepaint = function() {
-      return this.content = this.content === '' ? ' ' : '';
-    };
-
-    ProgressBar.prototype._createCSSRule = function() {
-      return this.elementSelector + "." + className + "::before {\n  content: '" + this.content + "';\n  position: fixed;\n  top: 0;\n  left: 0;\n  z-index: 2000;\n  background-color: #0076ff;\n  height: 3px;\n  opacity: " + this.opacity + ";\n  width: " + this.value + "%;\n  transition: width " + this.speed + "ms ease-out, opacity " + (this.speed / 2) + "ms ease-in;\n  transform: translate3d(0,0,0);\n}";
-    };
-
-    return ProgressBar;
-
-  })();
-
   bypassOnLoadPopstate = function(fn) {
     return setTimeout(fn, 500);
   };
 
   installDocumentReadyPageEventTriggers = function() {
     return document.addEventListener('DOMContentLoaded', (function() {
-      triggerEvent(EVENTS.CHANGE);
-      return triggerEvent(EVENTS.UPDATE);
+      triggerEvent('page:change');
+      return triggerEvent('page:update');
     }), true);
   };
 
@@ -11546,7 +11354,7 @@ return jQuery;
         if (!jQuery.trim(xhr.responseText)) {
           return;
         }
-        return triggerEvent(EVENTS.UPDATE);
+        return triggerEvent('page:update');
       });
     }
   };
@@ -11566,6 +11374,7 @@ return jQuery;
   initializeTurbolinks = function() {
     rememberCurrentUrl();
     rememberCurrentState();
+    createDocument = browserCompatibleDocumentParser();
     document.addEventListener('click', Click.installHandlerLast, true);
     window.addEventListener('hashchange', function(event) {
       rememberCurrentUrl();
@@ -11606,11 +11415,17 @@ return jQuery;
     visit: visit,
     pagesCached: pagesCached,
     enableTransitionCache: enableTransitionCache,
-    enableProgressBar: enableProgressBar,
     allowLinkExtensions: Link.allowExtensions,
-    supported: browserSupportsTurbolinks,
-    EVENTS: clone(EVENTS)
+    supported: browserSupportsTurbolinks
   };
+
+}).call(this);
+(function() {
+
+
+}).call(this);
+(function() {
+
 
 }).call(this);
 // This is a manifest file that'll be compiled into application.js, which will include all the files
