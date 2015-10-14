@@ -170,6 +170,32 @@ aside {
   margin-top: 15px;
 }
 
+/* social media icons */
+
+#social-panel
+{
+  float: right;
+
+}
+
+.sm-icon > *
+{
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+  padding: 3px;
+  color: red;
+  border: 3px solid gray;
+  border-radius: 10px
+}
+
+.sm-icon > *:hover 
+{
+  color: black;
+  border-radius: 0px;
+  background-color: rgba(173,216,230,.4);
+  
+}
 
 /* miscellaneous */
 

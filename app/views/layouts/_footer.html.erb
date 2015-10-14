@@ -3,10 +3,19 @@
     Morgan J. Howell's Portfolio, courtesy of Rails
   </small>
   <nav>
-    <ul>
-      <li><%= link_to "About",   bio_path %></li>
-      <li><%= link_to "Contact", contact_path %></li>
-      <li><a href="https://www.facebook.com/mhowl1">F</a></li>
-    </ul>
+    <table id="social-panel">
+      <tr>
+
+      <td><%= link_to image_tag("Facebook_Icon.png"), "https://www.facebook.com/mhowl1", :class =>'sm-icon'%> </td>
+
+      <td> <%= link_to image_tag("LinkedIn_Icon.png"), "https://www.linkedin.com/pub/morgan-howell/51/817/211", :class =>'sm-icon'%> </td>
+
+      <td> <%= link_to image_tag("GooglePlus_Icon.png"), "https://plus.google.com/u/0/+MorganHowell1995/posts", :class =>'sm-icon'%> </td>
+
+      <td> <%= link_to image_tag("GitHub_Icon.png"), "https://github.com/morganhowell95", :class =>'sm-icon'%> </td>
+
+    </tr>
+
+    </table>
   </nav>
 </footer>
