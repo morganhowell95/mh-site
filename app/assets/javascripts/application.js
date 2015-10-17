@@ -12,8 +12,9 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require turbolinks
+
 //= require_tree .''
+//= require init
 
 $(document).ready(function () {
 
@@ -546,4 +547,6 @@ $(document).ready(function () {
 		var funct = function() {$('#start-button').click();}
 		time_keeper = window.setTimeout(funct, wait);
 	});
-})
+});
+
+
