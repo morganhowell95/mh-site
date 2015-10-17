@@ -250,12 +250,16 @@ $(document).ready(function () {
 	var time_keeper;
 
 	$("#start-button").click(function(evt){
+		$("#start-button").prop("disabled",true);
+		$("#next-button").prop("disabled",true);
 		var speed_ms = 400;
 		var funct = function() {$('#next-button').click();}
 		time_keeper = window.setInterval(funct, speed_ms);
 	});
 
 	$("#stop-button").click(function(evt){
+		$("#start-button").prop("disabled",false);
+		$("#next-button").prop("disabled",false);
 		window.clearInterval(time_keeper);
 	});
 
