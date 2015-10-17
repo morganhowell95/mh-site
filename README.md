@@ -7,4 +7,4 @@ https://morganhowell.herokuapp.com/
 
 or
 
-https://morgan-howell.com/
+http://morgan-howell.com/
