@@ -39,10 +39,10 @@ $(document).ready(function () {
 					var current_alive = ($cell.attr("data-alive") == "true");
 
 					if(!current_alive && active){
-						$cell.click();
+						$cell.mousedown();
 					} 
 					if(current_alive && !active){
-						$cell.click();
+						$cell.mousedown();
 					} 
 					unique_id++;
 				}
@@ -73,43 +73,50 @@ $(document).ready(function () {
 	//construct initial grid
 	constructGrid();
 
-	//clicking a cell triggers a change in state between dead/alive
-	$("#canvas-cells").on("click", ".cell", function(evt){
-		$(evt.target).toggleClass("alive");
-		var control_click = evt.metaKey
-		var shift_click = evt.shiftKey
-		//console.log($(evt.target));
-		var state = $(evt.target).attr("data-alive");
-
-		if(!shift_click && (control_click || state==="true")){
-			$(evt.target).attr("data-alive","false");
-			$(evt.target).addClass("was-alive");
-			$(evt.target).removeClass("alive");
-		} else {
-			$(evt.target).addClass("alive");
-			$(evt.target).attr("data-alive","true");
-			$(evt.target).removeClass("was-alive");
-		}		
-	});
-
+	//click events with the capacity to drag
 	$(function () {
 		  var isMouseDown = false;
 		  $("#canvas-cells")
 		  .mousedown(function (evt) {
-		      isMouseDown = true;
-		      var tag = $(evt.target).attr("id");
-		      var query_string = "#" + tag;
-		      $(query_string).click();
+	        isMouseDown = true;
+			$(evt.target).toggleClass("alive");
+			var control_click = evt.metaKey
+			var shift_click = evt.shiftKey
+			//console.log($(evt.target));
+			var state = $(evt.target).attr("data-alive");
+
+			if(!shift_click && (control_click || state==="true")){
+				$(evt.target).attr("data-alive","false");
+				$(evt.target).addClass("was-alive");
+				$(evt.target).removeClass("alive");
+				} else {
+				$(evt.target).addClass("alive");
+				$(evt.target).attr("data-alive","true");
+				$(evt.target).removeClass("was-alive");
+				}	
 		      return false; // prevent text selection
 		    })
 		    .mouseover(function (evt) {
 		      if (isMouseDown) {
 		       	var tag = $(evt.target).attr("id");
 		      	var query_string = "#" + tag;
-		      	$(query_string).click();
+		      	$(evt.target).toggleClass("alive");
+				var control_click = evt.metaKey
+				var shift_click = evt.shiftKey
+				//console.log($(evt.target));
+				var state = $(evt.target).attr("data-alive");
+
+				if(!shift_click && (control_click || state==="true")){
+					$(evt.target).attr("data-alive","false");
+					$(evt.target).addClass("was-alive");
+					$(evt.target).removeClass("alive");
+				} else {
+					$(evt.target).addClass("alive");
+					$(evt.target).attr("data-alive","true");
+					$(evt.target).removeClass("was-alive");
+				}	
 		      }
 		    });
-		  
 		  $(document)
 		    .mouseup(function () {
 		      isMouseDown = false;
@@ -219,7 +226,7 @@ $(document).ready(function () {
 
 	//listeners for the main control panel
 	$("#reset-button").click(function(evt){
-		$("#stop-button").click()
+		$("#stop-button").mousedown()
 		$('.cell').removeClass("alive");
 		$('.cell').removeClass("was-alive");
 		$('.cell').attr("data-alive","false")
@@ -227,7 +234,7 @@ $(document).ready(function () {
 	});
 
 	$("#next-button").click(function(evt){
-		if ($('td[data-alive="true"]').length==0) $("#stop-button").click()
+		if ($('td[data-alive="true"]').length==0) $("#stop-button").mousedown()
 		//construct the model for the automata
 		automata.construct_model();
 		next_grid = automata.step();
@@ -243,7 +250,7 @@ $(document).ready(function () {
 
 	$("#start-button").click(function(evt){
 		var speed_ms = 200;
-		var funct = function() {$('#next-button').click();}
+		var funct = function() {$('#next-button').mousedown();}
 		time_keeper = window.setInterval(funct, speed_ms);
 	});
 
@@ -252,12 +259,12 @@ $(document).ready(function () {
 	});
 
 	$("#scatter-button").click(function(evt){
-		$('#reset-button').click();
+		$('#reset-button').mousedown();
 		for(var i=0;i<(updateGrid.height()*updateGrid.width());i++){
 			var number_pick = Math.random();
 			var turn_alive = (number_pick<0.5);
 			var query_string = '#cell-'+i;
-			if(turn_alive) $(query_string).click();
+			if(turn_alive) $(query_string).mousedown();
 		}
 	});
 
