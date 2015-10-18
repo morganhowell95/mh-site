@@ -275,7 +275,6 @@ $(document).ready(function () {
 
 
 	//PRELOADED DRAWINGS
-
 	var preloaded_drawing = " \
 		cell-130  \
 		cell-175  \
