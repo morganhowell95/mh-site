@@ -26,6 +26,12 @@
     font-size: 12px;
 }
 
+.bio-photo
+{
+	height: 250px;
+	width: 170px;
+	border-radius: 10px;
+}
 
 .options
 {
