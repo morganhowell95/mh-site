@@ -14,7 +14,7 @@
  *= require_self
  */
 
-h2
+.row h1
 {
 	text-align: left;
 	text-decoration: underline;
@@ -36,6 +36,7 @@ h2
 	height: 250px;
 	width: 170px;
 	border-radius: 10px;
+	margin-left: 100px;
 }
 
 .options

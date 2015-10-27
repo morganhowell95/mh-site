@@ -18,6 +18,19 @@
 
 $(document).ready(function () {
 
+	//Javascript for image viewers
+
+	$( ".image" ).mouseenter(function(evt) {
+		$(evt.target).hide()
+	});
+
+	$( ".image-link" ).mouseleave(function(evt) {
+		$(".image").show()
+	});
+
+
+
+
 	//holds information for new grid dimensions
 	var updateGrid = {
 

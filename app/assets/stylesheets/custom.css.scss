@@ -207,3 +207,60 @@ aside {
   @include box_sizing;
 }
 
+/*customization of portfolio links */
+
+
+.image-link
+{
+  width: 150px;
+  height: 150px;
+  border-radius: 10px;
+  background-color: gray;
+  z-index: 5;
+  margin-right: 60px;
+  margin-top: 50px;
+  float: right;
+  border: 1px solid black;
+  padding: 0 0 0 0;
+  cursor: pointer;
+}
+
+
+.image-link:hover
+{
+  background-color: rgba(0,128,128, .2);
+  color: black;
+  background-image:none
+}
+
+.image
+{
+  margin: 0 0 0 0;
+  height: 100%;
+  width: 100%;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.image-text
+{
+  position: absolute;
+  z-index: -1;
+  margin-left: 10px;
+  margin-top: 17px;
+  font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+  font-size: 13px;
+}
+
+#contact-info
+{
+  margin-top: 50px;
+  margin-bottom: 50px;
+  width: 400px;
+  margin-left: 350px;
+  border: 1px black solid;
+}
+
+
+
+

@@ -1,50 +1,147 @@
 <% provide(:title, "Portfolio") %>
 
-<h2> Vitrium Health </h2>
+<div class="row">
+	<div class="col-md-6">
+	<h1> Vitrium Health, Inc.</h1>
 
-<p> Public face where doctors are free to request a pilot <p>
-	<a href="http://vitriumhealth.com/">Vitrium Front</a>
+	<p> Vitrium is a Google Glass app that automates the note taking process for surgeons during surgery. Currently a third party sales representative records devices that are implanted within patients in the operating room. Vitrium provides a hands-free method of recording device names, such as "2.5mm Stryker Screw", so that the information can be appended to the patient's EHR for inventory purposes. </p>
+	</div>
 
-<p> APIs that surgeons can use as a portal to append notes for specific patients through the Glass app <p>
-	<a href="http://vitrium-health.herokuapp.com/">Vitrium APIs</a>
+		<div onclick="location.href='http://vitriumhealth.com/'" id="vitrium-public" class="image-link col-md-3">
+			<p class= "image-text"> Our public facing website where surgeons can request demos.</p>
+				<%= link_to href: 'http://www.vitriumhealth.com/' do %>
+    				<%= image_tag 'vitrium-logo.png', alt: 'vitrium health link', class: 'image'%>
+				<% end %>
+		</div>
+
+		<div onclick="location.href='http://vitrium-health.herokuapp.com/'" id="vitrium-public" class="image-link col-md-3">
+			<p class= "image-text"> Vitrium APIs where doctors can append information to clients' EHR within Glass.</p>
+				<%= link_to href: 'http://www.vitriumhealth.com/' do %>
+    				<%= image_tag 'vitriumapi-logo.png', alt: 'vitrium health link', class: 'image'%>
+				<% end %>
+		</div>
+
+</div>
+
+<div class="row">
+	<div class="col-md-6">
+	<h1> Carolina Creates</h1>
+
+	<p> Carolina Creates' mission is to foster innovative creation on campus by providing the resources needed to make ideas happen. The organization builds a collaborative community of innovators, leaders, thinkers, and doers. I joined my Junior year as board member and Director of Technology. Under Carolina Creates I developed my school's first crowdfunding platform, where statups can apply to be funded by fellow students.</p>
+	</div>
+
+		<div onclick="location.href='http://www.carolinacreates.unc.edu/'"  class="image-link col-md-3">
+			<p class= "image-text"> Carolina Creates public face. Check out the Createathon we host! I teach the coding workshops.</p>
+				<%= link_to href: 'http://www.carolinacreates.unc.edu/' do %>
+    				<%= image_tag 'carolinacreates-logo.png', alt: 'carolina creates', class: 'image'%>
+				<% end %>
+		</div>
+
+		<div onclick="location.href='http://www.carolinacreates.unc.edu/crowdfunding-platform'"  class="image-link col-md-3">
+			<p class= "image-text"> The Sonder Market was recently accepted on our platform. Contributions are generated via this link.</p>
+				<%= link_to href: 'http://www.carolinacreates.unc.edu/crowdfunding-platform' do %>
+    				<%= image_tag 'pig.png', alt: 'crowdfunding platform', class: 'image'%>
+				<% end %>
+		</div>
+
+</div>
 
 
-<h2> Carolina Creates </h2>
 
-<p> I manage the technology sector as well as our website, I just released an online crowdfunding platform where students can donate to startups on campus. Checkout the link below for Sonder Market's platform. <p>
+<div class="row">
+	<div class="col-md-6">
+	<h1> Appetite</h1>
 
-	<a href="http://www.carolinacreates.unc.edu/crowdfunding-platform">Sonder Market Crowdfunding Platform</a>
+	<p> Appetite is an iOS and Android application designed to provide suggestions of local venues based on the user's perceived mood. The application will collect information on the user's profile (if allowed) and environmental factors such as weather and time to come up with a selection of moods for the user to pick.
+	</p>
+	</div>
 
+		<div onclick="location.href='https://github.com/morganhowell95/Appetite'" class="image-link col-md-3">
+			<p class= "image-text"> Open source Objective-C</p>
+				<%= link_to href: 'https://github.com/morganhowell95/Appetite' do %>
+    				<%= image_tag 'GitHub_Icon.png', alt: 'appetite open source', class: 'image'%>
+				<% end %>
+		</div>
 
-<h2> WebPro Finder - Hackathon Winner! (3rd place)</h2>
+		<div onclick="location.href='https://play.google.com/store/apps/details?id=guru.apps.llc.appetite&hl=en'"  class="image-link col-md-3">
+			<p class= "image-text"> Appetite on Google Play!</p>
+				<%= link_to href: 'https://play.google.com/store/apps/details?id=guru.apps.llc.appetite&hl=en' do %>
+    				<%= image_tag 'appetite-logo.png', alt: 'google play link', class: 'image'%>
+				<% end %>
+		</div>
 
-<p> An app for GoDaddy’s small business customers to find and work with each other based on location and skillset, so they can take on bigger projects. The app was integrated as a part of the GoDaddy WebPro program after the hackathon upon Product Manager’s request.<p>
-
-
-<h2> Appetite </h2>
-
-<p> I created an app with a friend, Josh Potter, that recognizes your mood and predicts where you'd like to eat based on your situational context. I've released my Objective-C code to the public on Github and the Android app has been published.<p>
-
-	<a href="https://play.google.com/store/apps/details?id=guru.apps.llc.appetite&hl=en">Link to Android app</a>
-	<a href="https://github.com/morganhowell95/Appetite">Open source Objective-C code</a>
-
-
-<h2> DBMS for public schools in Zanzibar </h2>
-
-<p> I traveled to Zanzibar, Tanzania for three months where I lectured on design patterns and more modern programming languages at the local universities. During my time there I also wrote a database management system that aided the retreival of information for a few schools.<p>
-
-	<a href="https://github.com/morganhowell95/Secondary-School-Management-in-Zanzibar"> Minimal recreation of the code in English</a>
-
-
-<h2> ScanMi </h2>
-
-<p> I thought it would be cool to embed information in images without being able to see the embedded information. This inspired my creation of a Java application which utilizes a form of cellular automata to recreate hidden pixels that have been recognizably manipulated. <p>
-
-	<a href="https://github.com/morganhowell95/Secondary-School-Management-in-Zanzibar"> Open source to come as soon as I scrape my old laptop</a>
+</div>
 
 
-<h2> Bayesian-Analysis from the Flow Cytometer </h2>
 
-<p> I held a research position at Duke University where I wrote a script to parse and detect activated cells using some elementary analysis on graph sets.<p>
+<div class="row">
+	<div class="col-md-6">
+	<h1> WebPro Finder</h1>
 
-	<a href="https://github.com/morganhowell95/Secondary-School-Management-in-Zanzibar"> Open source to come as soon as I scrape my old laptop</a>
+	<p> An app for GoDaddy’s small business customers to find and work with each other based on location and skillset, so they can take on bigger projects. The app was integrated as a part of the GoDaddy WebPro program after the hackathon upon Product Manager’s request. Won third place in the GoDaddy company hackathon.</p>
+	</div>
+
+		<div onclick="location.href='https://www.godaddy.com/pro?isc=BB2470&ci='" class="image-link col-md-3">
+			<p class= "image-text"> Code is kept private for now by GoDaddy, but check out the team the product is made for!</p>
+				<%= link_to href: 'https://www.godaddy.com/pro?isc=BB2470&ci=' do %>
+    				<%= image_tag 'pro-logo.png', alt: 'WebPro Finder', class: 'image'%>
+				<% end %>
+		</div>
+
+
+</div>
+
+
+<div class="row">
+	<div class="col-md-6">
+	<h1> ScanMi</h1>
+
+	<p> I thought it would be cool to embed information in images without being able to see the embedded information. This inspired my creation of a Java application which utilizes a form of cellular automata to recreate hidden pixels that have been recognizably manipulated.</p>
+	</div>
+
+		<div onclick="location.href='https://github.com/morganhowell95/ScanMi'" class="image-link col-md-3">
+			<p class= "image-text"> Check out the open source code I released on GitHub!</p>
+				<%= link_to href: 'https://github.com/morganhowell95/ScanMi' do %>
+    				<%= image_tag 'scanmi-logo.png', alt: 'ScanMi link', class: 'image'%>
+				<% end %>
+		</div>
+
+
+</div>
+
+
+<div class="row">
+	<div class="col-md-6">
+	<h1> DBMS for public schools in Zanzibar </h1>
+
+	<p> I traveled to Zanzibar, Tanzania for three months where I lectured on design patterns and more modern programming languages at the local universities. During my time there I also wrote a database management system that aided the retreival of information for a few schools.</p>
+	</div>
+
+		<div onclick="location.href='https://github.com/morganhowell95/Secondary-School-Management-in-Zanzibar'" class="image-link col-md-3">
+			<p class= "image-text"> I recreated a minimal version for GitHub in English.</p>
+				<%= link_to href: 'https://github.com/morganhowell95/Secondary-School-Management-in-Zanzibar' do %>
+    				<%= image_tag 'zanzibaricon.jpg', alt: 'ZanziData link', class: 'image'%>
+				<% end %>
+		</div>
+
+
+</div>
+
+<div class="row">
+	<div class="col-md-6">
+	<h1> FCAnalyze</h1>
+
+	<p> I held a research position at Duke University my Senior year in high school where I wrote a script to parse and detect activated cells using some elementary analysis on graph sets using a pretty simple algorithm. It detects peaks (or an average peak in a bimodal context) and if the average distribution is between two set thresholds, the cell is deemed "activated". This means GFP upregulation was succesfully detected by being within the range of a particular photon count.</p>
+	</div>
+
+		<div onclick="location.href='http://2012.igem.org/Team:Duke/Project'" class="image-link col-md-3">
+			<p class= "image-text"> If that sounded like a slur of jargon, check out this link that describes the project in greater detail.</p>
+				<%= link_to href: 'http://2012.igem.org/Team:Duke/Project' do %>
+    				<%= image_tag 'duke-logo.png', alt: 'iGEM link', class: 'image'%>
+				<% end %>
+		</div>
+
+
+</div>
+
+
